@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Calvin Masindi",
+  "classifications": [ "Web","API", "Windows", "C#" ],
+  "identity": "doosy.template.web",
+  "name": "Doosy API",
+  "shortName": "DoosyAPI",
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "sourceName": "Doosy",
+  "preferdNameDirectory": "true",
+  "defaultName": "Doosy.API",
+  "description": "Doosy template to create api projects",
+  "primaryOutputs" : [
+	{
+		"path" : "Doosy.sln"
+	}
+  ]
+}
