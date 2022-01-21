@@ -1,5 +1,6 @@
 ﻿using Doosy.Domain.Extensions;
 using Doosy.Infrastructure.Extensions;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,21 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddDomain();
+
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;
+    options.HttpsPort = 5001;
+});
+
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Services.AddHttpsRedirection(options =>
+    {
+        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+        options.HttpsPort = 443;
+    });
+}
 
 var app = builder.Build();
 
