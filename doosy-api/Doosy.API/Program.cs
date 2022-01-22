@@ -19,14 +19,6 @@ builder.Services.AddHttpsRedirection(options =>
     options.HttpsPort = 5001;
 });
 
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHttpsRedirection(options =>
-    {
-        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
-        options.HttpsPort = 443;
-    });
-}
 
 var app = builder.Build();
 
@@ -36,7 +28,7 @@ if (app.Environment.IsDevelopment())
     
 }
 
-app.UseSwagger();
+app.UseSwagger( x => x.SerializeAsV2 = true);
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseCors(builders => builders.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
