@@ -13,11 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddDomain();
 
-builder.Services.AddHttpsRedirection(options =>
-{
-    options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;
-    options.HttpsPort = 5001;
-});
+
 
 
 var app = builder.Build();
@@ -29,7 +25,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSwagger( x => x.SerializeAsV2 = true);
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "OnUS API");
+});
 app.UseHttpsRedirection();
 app.UseCors(builders => builders.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
