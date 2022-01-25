@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Doosy.API.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
     public class PersonController : Controller
     {
-        IPersonService service;
+        readonly IPersonService service;
 
         public PersonController(IPersonService service)
         {
