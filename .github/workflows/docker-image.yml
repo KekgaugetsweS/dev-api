@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     
 env:
-   IMAGE_NAME: doosy_api
+   IMAGE_NAME: doosyapi
 jobs:
   release:
     runs-on: ubuntu-latest
