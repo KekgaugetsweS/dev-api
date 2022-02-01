@@ -3,7 +3,7 @@ name: Release to Docker Hub
 on:
   workflow_dispatch:
     inputs:
-      project:
+      environment:
         description: 'Environment'
         required: true
         options: ['production', 'staging', 'development']
@@ -48,7 +48,6 @@ jobs:
             #docker rm doosy_api;
             
             docker pull kekgaugetswe/doosyapi
-            docker create --name doosyapi  -p 5002:80 kekgaugetswe/doosyapi:latest
-            docker start doosyapi
+            docker run -d -p 5002:80  --name doosyapi --env environment=${{git.event.inputs.environment }} kekgaugetswe/doosyapi
           #fi
           docker ps -a
