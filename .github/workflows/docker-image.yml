@@ -2,6 +2,12 @@ name: Release to Docker Hub
 
 on:
   workflow_dispatch:
+    inputs:
+      project:
+        description: 'Environment'
+        required: true
+        options: ['production', 'staging', 'development']
+        default: 'development'
     
 env:
    IMAGE_NAME: doosyapi
