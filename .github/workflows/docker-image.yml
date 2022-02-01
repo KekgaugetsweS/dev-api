@@ -48,6 +48,6 @@ jobs:
             #docker rm doosy_api;
             
             docker pull kekgaugetswe/doosyapi
-            docker run -d -p 5002:80  --name doosyapi --env environment=${{git.event.inputs.environment }} kekgaugetswe/doosyapi
+            docker run -d -p 5002:80  --name doosyapi --env environment=${{github.event.inputs.environment }} kekgaugetswe/doosyapi
           #fi
           docker ps -a
