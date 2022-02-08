@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment'
+        description: 'Environment'  
         required: true
         options: ['production', 'staging', 'development']
         default: 'development'
