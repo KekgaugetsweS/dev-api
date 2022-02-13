@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        type: environment
-        default: DEV
+        type: Choice
+        default: Development
         options:
          - Developement
          - Production
