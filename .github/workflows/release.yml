@@ -9,6 +9,10 @@ on:
       environment:
         type: environment
         default: DEV
+        options:
+         - Developement
+         - Production
+         - Uat
         required: true
         
 env:
