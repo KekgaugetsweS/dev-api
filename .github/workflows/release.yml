@@ -57,7 +57,7 @@ jobs:
         with:
           push: true
           tags: ${{ env.REPO }}:latest,${{ env.REPO }}:${{ env.VERSION }}
-          file: Doosy-cms/Dockerfile 
+          file: doosy-api/Doosy.API/Dockerfile 
           
       - name: testing doosy-deploy ssh connection
         uses: appleboy/ssh-action@master
