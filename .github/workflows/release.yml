@@ -17,7 +17,7 @@ on:
         
 env:
   DOCKER_USERNAME: kekgaugetswe
-  REPO: kekgaugetswe/doosy-cms
+  REPO: kekgaugetswe/doosyapi
 
 jobs:
   docker:
