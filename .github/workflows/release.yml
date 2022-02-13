@@ -1,0 +1,79 @@
+name: Docker Image CI
+
+on:
+  push:
+    tags:
+    - '*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        default: DEV
+        required: true
+        
+env:
+  DOCKER_USERNAME: kekgaugetswe
+  REPO: kekgaugetswe/doosy-cms
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Fetch all commits
+          fetch-depth: 0
+
+      - name: Set environment variables
+        run: |
+          cat >> $GITHUB_ENV << EOF
+          VERSION=${GITHUB_REF##*/}
+          EOF
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      
+      - name: Create Release
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.event.inputs.tag_name }}
+          release_name: ${{ github.event.inputs.tag_name }}
+          prerelease: ${{ github.event.inputs.tags }}
+       
+
+      - name: Build and push
+        uses: docker/build-push-action@v2 
+        with:
+          push: true
+          tags: ${{ env.REPO }}:latest,${{ env.REPO }}:${{ env.VERSION }}
+          file: Doosy-cms/Dockerfile 
+          
+      - name: testing doosy-deploy ssh connection
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST}}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            if [  "$(docker ps  -a -f status=running  -f  name=doosy-cms)" ]; then
+              docker kill doosy-cms;
+              docker rm doosy-cms;
+              docker pull ${{ env.REPO }}:${{ env.VERSION }};
+              docker create --name doosy-cms  -p 5007:80 ${{ env.REPO }}:${{ env.VERSION }} ${{ github.event.inputs.environment }}
+              docker start doosy-cms
+             
+             else
+              docker pull ${{ env.REPO }}:${{ env.VERSION }}
+              docker create --name doosyapi  -p 5007:80 ${{ env.REPO }}:${{ env.VERSION }} ${{ github.event.inputs.environment }}
+              docker start doosyapi
+              
+            fi
+            docker ps -a
